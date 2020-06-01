@@ -4,25 +4,36 @@
 #include "getch.c"
 
 
+int issign(char c);
 int getint(int *pn);
+int getchnext();
+
+int issign(char c)
+{
+    return c == '+' || c == '-';
+}
+
+int getchnext() {
+    int c;
+    while (isspace(c = getch()));
+    return c;
+}
 
 /* getint: get next integer from input into *pn */
 int getint(int *pn)
 {
-    int c, sign;
+    int c, sign, is_sign;
 
-    while (isspace(c = getch()))
-        /* skip white space */
-        ;
+    c = getchnext();
 
-    if (!isdigit(c) && c != EOF && c != '+' && c != '-') {
-        ungetch(c);     /* it's not a number */
-        return 0;
+    if (!isdigit(c) && c != EOF && !issign(c)) {
+        printf("ERROR: %c it is not a number\n", c);
+        return EOF;
     }
 
     sign = (c == '-') ? -1 : 1;
-    if (c == '+' || c == '-')
-        c = getch();
+    if (issign(c))
+        c = getchnext();
 
     for (*pn = 0; isdigit(c); c = getch())
         *pn = 10 * *pn + (c - '0');
