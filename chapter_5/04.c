@@ -1,5 +1,4 @@
 #include<stdio.h>
-#define MAX_SIZE 100
 
 int strend(char s[], char t[]);
 
@@ -7,8 +6,8 @@ int strend(char s[], char t[]);
 int main(int argc, char *argv[])
 {
     int result;
-    char full_name[MAX_SIZE]= "john smith";
-    char surname[MAX_SIZE]= "smith";
+    char full_name[] = "john smith";
+    char surname[] = "smith";
 
     result = strend(full_name, surname);
     printf(
@@ -21,13 +20,19 @@ int main(int argc, char *argv[])
 }
 
 
-int strend(char s[], char t[]) {
-    int i, j;
+int strend(char *s, char *t) {
+    int size;
 
-    for (i = 0; s[i] != '\0'; ++i);
-    for (j = 0; t[j] != '\0'; ++j);
+    for (; *s != '\0'; ++s);
+    for (; *t != '\0'; ++t, ++size);
 
-
+    while(size-- > 0) {
+        if (*t != *s) {
+            return 0;
+        }
+        t--;
+        s--;
+    }
 
     return 1;
 }
